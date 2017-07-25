@@ -1,5 +1,5 @@
 #By: Jorge Santos
-#Let paddle 1 and 2 be key controlled
+#Fix scoring system
 
 import pygame, sys
 from pygame.locals import*
@@ -72,40 +72,30 @@ def checkHitBall(ball, paddle1, paddle2, ballDirX):
         return -1
     else: return 1
 
-def checkPointScored(paddle1, ball, score, ballDirX):
-    #reset points if left wall is hit
-    if ball.left == LINETHICKNESS:
-        return 0
-    #1 point for hitting the ball
-    elif (
-        ballDirX == -1 and paddle1.right == ball.left
-        and paddle1.top < ball.top and paddle1.bottom > ball.bottom
-        ):
-        score += 1
-        return score
-    #5 points for beating the other paddle
-    elif ball.right == WINDOWWIDTH - LINETHICKNESS:
-        score += 5
-        return score 
-    #if no points scored, return score unchanged
-    else: return score
-
-def displayScore(score):
-    resultSurf = BASICFONT.render('Score = %s' %(score), True, WHITE)
+def displayScore(score2):
+    resultSurf = BASICFONT.render('Player 2: %s' %(score2), True, WHITE)
     resultRect = resultSurf.get_rect()
     resultRect.topleft = (WINDOWWIDTH -150, 25)
     DISPLAYSURF.blit(resultSurf, resultRect)
-def checkHighScore(score, highScore):
-    if highScore >= score:
-        return highScore
-    elif highScore < score:
-        highScore == score
-        return score
-def displayHighScore(highScore):
-    resultSurf = BASICFONT.render('High Score = %s' %(highScore), True, WHITE)
+    
+def displayHighScore(score1):
+    resultSurf = BASICFONT.render('Player 1: %s' %(score1), True, WHITE)
     resultRect = resultSurf.get_rect()
     resultRect.topleft = (50, 25)
     DISPLAYSURF.blit(resultSurf, resultRect)
+
+def checkPointScored1(ball, score1, ballDirX):
+    if ball.right == WINDOWWIDTH - LINETHICKNESS:
+        score1 += 1
+        return score1
+    else:
+        return score1
+def checkPointScored2(ball, score2, ballDirx):
+    if ball.left == LINETHICKNESS:
+        score2 += 1
+        return score2
+    else:
+        return score2
 
 #Main function
 def main():
@@ -129,8 +119,8 @@ def main():
     playerOnePosition = (WINDOWHEIGHT - PADDLESIZE) /2
     playerTwoPosition = (WINDOWHEIGHT - PADDLESIZE) /2
 
-    score = 0
-    highScore = 0
+    score1 = 0
+    score2 = 0
 
     paddle1 = pygame.Rect(PADDLEOFFSET,playerOnePosition, LINETHICKNESS,PADDLESIZE)
     paddle2 = pygame.Rect(WINDOWWIDTH - PADDLEOFFSET - LINETHICKNESS, playerTwoPosition, LINETHICKNESS,PADDLESIZE)
@@ -178,14 +168,14 @@ def main():
         #ballDirX, ballDirY
         ball = moveBall(ball, ballDirX, ballDirY)
         ballDirX, ballDirY = checkEdgeCollision(ball, ballDirX, ballDirY)
-        highScore = checkHighScore(score, highScore)
-        score = checkPointScored(paddle1, ball, score, ballDirX)
+        score1 = checkPointScored1(ball, score1, ballDirX)
+        score2 = checkPointScored2(ball, score2, ballDirX)
         ballDirX = ballDirX * checkHitBall(ball, paddle1, paddle2, ballDirX)
         paddle1.y += PADDLESPEED1
         paddle2.y += PADDLESPEED2
 
-        displayScore(score)
-        displayHighScore(highScore)
+        displayScore(score2)
+        displayHighScore(score1)
 
         pygame.display.update()
         FPSCLOCK.tick(FPS)
