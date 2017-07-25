@@ -72,13 +72,13 @@ def checkHitBall(ball, paddle1, paddle2, ballDirX):
         return -1
     else: return 1
 
-def displayScore(score2):
+def displayScore2(score2):
     resultSurf = BASICFONT.render('Player 2: %s' %(score2), True, WHITE)
     resultRect = resultSurf.get_rect()
     resultRect.topleft = (WINDOWWIDTH -150, 25)
     DISPLAYSURF.blit(resultSurf, resultRect)
     
-def displayHighScore(score1):
+def displayScore1(score1):
     resultSurf = BASICFONT.render('Player 1: %s' %(score1), True, WHITE)
     resultRect = resultSurf.get_rect()
     resultRect.topleft = (50, 25)
@@ -174,8 +174,8 @@ def main():
         paddle1.y += PADDLESPEED1
         paddle2.y += PADDLESPEED2
 
-        displayScore(score2)
-        displayHighScore(score1)
+        displayScore2(score2)
+        displayScore1(score1)
 
         pygame.display.update()
         FPSCLOCK.tick(FPS)
